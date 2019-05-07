@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<title>DEBUG & TEST</title>
+
+	<style>
+		table {
+			border-collapse: collapse;
+		}
+		table, td {
+		  border: 1px solid black;
+		  height: 50px;	
+		  padding: 15px;
+		  text-align: left;
+		}
+		th {
+		  background-color: #4CAF50;
+		  color: white;
+		  height: 25px;
+		  text-align: center;
+		}
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+		button {
+			background-color: #5F9EA0; /* Cadet Blue */
+			border: none;
+			color: white;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			border-radius: 4px;
+			cursor: pointer;
+			display: inline-block;
+			opacity: 0.6;
+  			transition: 0.3s;
+		}
+		button:hover {
+		  opacity: 1;
+		}
+		button.remove {
+			background-color: #f44336; /* Red */
+		}
+		button.remove:hover {
+		  background-color: #000000; /* Black */
+		}
+
+		.flex-container {
+		  display: flex;
+		}
+
+		.flex-container > div {
+		  margin: 10px;
+		  padding: 10px;
+		  margin-top: 0px;
+		}
+
+		.flex-container > div > div {
+		  margin-top: 30px;
+		}
+
+	</style>
+
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  	<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js"></script>
+
+  	<!-- Add Firebase products that you want to use -->
+  	<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-auth.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-database.js"></script>
+
+	<script src="./configs/firebase.js"></script>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	 var socket = io();
+
+	 socket.on('SERVER-STATUS', data => {
+	 	document.getElementById("client-count").innerHTML = data.ACTIVE_CLIENT_COUNT;
+	 	document.getElementById("user-count").innerHTML = data.LOGGED_USER_COUNT;
+	 	document.getElementById("test-user-count").innerHTML = data.ACTIVE_TEST_USER_COUNT;
+	 });
+
+	 socket.on('online-users', data => {
+	 	document.getElementById("user-uid-list").innerHTML = "";
+	 	let keys = Object.keys(data);
+	 	if(keys == 0){
+	 		let li = document.createElement("LI");
+	 		let text = document.createTextNode("NoNe"); 
+	 		li.appendChild(text);
+	 		document.getElementById("user-uid-list").appendChild(li);
+	 	}else{
+		 	for (const key of keys) {
+		 		if(data[key].uid != undefined){
+			 		let li = document.createElement("LI");
+			 		let link = document.createElement("a");
+			 		let text = document.createTextNode(data[key].uid); 
+
+			 		link.setAttribute('href', "localhost:3000/user?uid=" + data[key].uid);
+			 		link.setAttribute('target', "_blank");
+			 		link.setAttribute('rel', "noopener noreferrer");
+			 		li.appendChild(link);
+			 		link.appendChild(text);
+			 		document.getElementById("user-uid-list").appendChild(li); 	
+		 		}
+		 	}	
+	 	}
+	 	
+	 });
+
+	 socket.on('connect', () => {
+		document.getElementById("socket-status").innerHTML = "Connected!"; 
+		document.getElementById("socket-status").style.color = "green";	
+		document.getElementById("socket-status-reason").innerHTML = "Not found.";
+		document.getElementById("socket-status-reason").style.color = "gray";
+		document.getElementById("user-uid-list").innerHTML = "...";
+	 });
+
+	 socket.on('disconnect', (reason) => {
+	 	document.getElementById("user-uid-list").innerHTML = "NoNe";
+	 	document.getElementById("client-count").innerHTML = "0";
+	 	document.getElementById("test-user-count").innerHTML = "0";
+	 	document.getElementById("user-count").innerHTML = "0";
+	 	document.getElementById("socket-status").innerHTML = "Disconnected!";
+	 	document.getElementById("socket-status").style.color = "red";
+	 	document.getElementById("socket-status-reason").innerHTML = reason;
+	 	document.getElementById("socket-status-reason").style.color = "black";
+	 });
+
+	 // ideal bir cozum degil, debug amacli kullanilacaği için performans önceliği yok
+	 setInterval( () => {
+	 	socket.emit('SERVER-STATUS', {});
+	 	socket.emit('get-online-users', {});
+	 }, 1000);
+
+	 openSocket = () => {
+	 	socket.connect();
+	 }
+
+	 closeSocket = () => {
+	 	socket.disconnect();
+	 }
+
+	 createUser = (userIndex) => {
+	 	switch(userIndex) {
+		  case 1:
+		  	/* Turkey -> Izmir -> Buca -> Dokuz Eylul Universitesi Egitim Kampusu */
+		  	firebase.database().ref('/users/' + '1').once('value').then( (snapshot) => { 
+		    	socket.emit('add-test-user', { 
+		    		uid: '1', 
+		    		longitude:27.1699766, 
+		    		latitude:38.3865991,
+		    		name: snapshot.val().name,
+		    		surname: snapshot.val().surname,
+		    		about: snapshot.val().about,
+		    		image_minified: snapshot.val().image_minified
+		    	});
+
+		  	});
+		    break;
+		  case 2:
+		  	/* Turkey -> Izmir -> Buca -> Haci Ahmet Tatari KYK Yurdu */
+		  	firebase.database().ref('/users/' + '2').once('value').then( (snapshot) => { 
+		    	socket.emit('add-test-user', { 
+		    		uid: '2', 
+		    		longitude:27.1825576, 
+		    		latitude:38.3912297,
+		    		name: snapshot.val().name,
+		    		surname: snapshot.val().surname,
+		    		about: snapshot.val().about,
+		    		image_minified: snapshot.val().image_minified
+		    	});
+
+		  	});
+		    break;
+		  case 3:
+		  	/* USA -> New York -> Central Park */
+		  	firebase.database().ref('/users/' + '3').once('value').then( (snapshot) => { 
+		    	socket.emit('add-test-user', { 
+		    		uid: '3', 
+		    		longitude:-73.968285, 
+		    		latitude:40.785091,
+		    		name: snapshot.val().name,
+		    		surname: snapshot.val().surname,
+		    		about: snapshot.val().about,
+		    		image_minified: snapshot.val().image_minified
+		    	});
+
+		  	});
+		    break;
+		  case 4:
+		  	/* Turkey -> Izmır -> Buca -> Ugur Mumcu Caddesi */
+		  	firebase.database().ref('/users/' + '4').once('value').then( (snapshot) => { 
+		    	socket.emit('add-test-user', { 
+		    		uid: '4', 
+		    		longitude:27.1681729, 
+		    		latitude:38.3855416,
+		    		name: snapshot.val().name,
+		    		surname: snapshot.val().surname,
+		    		about: snapshot.val().about,
+		    		image_minified: snapshot.val().image_minified
+		    	});
+
+		  	});
+		    break;
+		  case 5:
+		  	/* Turkey -> Izmır -> Buca -> Buca Spor Tesisleri */
+		  	firebase.database().ref('/users/' + '5').once('value').then( (snapshot) => { 
+		    	socket.emit('add-test-user', { 
+		    		uid: '5', 
+		    		longitude:27.1692927, 
+		    		latitude:38.3850669,
+		    		name: snapshot.val().name,
+		    		surname: snapshot.val().surname,
+		    		about: snapshot.val().about,
+		    		image_minified: snapshot.val().image_minified
+		    	});
+
+		  	});
+		    break;
+		  case 6:
+		    /* Turkey -> Izmir -> Buca -> Hasanağa Bahçesi */
+		  	firebase.database().ref('/users/' + '6').once('value').then( (snapshot) => { 
+		    	socket.emit('add-test-user', { 
+		    		uid: '6', 
+		    		longitude:27.1776582, 
+		    		latitude:38.3828136,
+		    		name: snapshot.val().name,
+		    		surname: snapshot.val().surname,
+		    		about: snapshot.val().about,
+		    		image_minified: snapshot.val().image_minified
+		    	});
+
+		  	});
+		    break;
+	 	}
+	 }
+
+	 removeUser = (userIndex) => {
+		socket.emit('remove-test-user', { uid: userIndex.toString() });
+	 }
+
+	</script>
+</head>
+<body>
+	<div class="flex-container">
+		<div>
+			<table>
+			<tr>
+				<th>Name</th>
+				<th>Location</th>
+				<th>Create User</th>
+				<th>Remove User</th>
+			</tr>
+			<tr>
+				<td>Jane Johnson</td>
+				<td>DEU Egitim Kampusu</td>
+				<td><button onclick="createUser(1)">Create</button></td>
+				<td><button class="remove" onclick="removeUser(1)">Remove</button></td>
+			</tr>
+			<tr>
+				<td>Rick Miller</td>
+				<td>Haci Ahmet Tatari Ogrenci Yurdu</td>
+				<td><button onclick="createUser(2)">Create</button></td>
+				<td><button class="remove" onclick="removeUser(2)">Remove</button></td>
+			</tr>
+			<tr>
+				<td>Ellish Morris</td>
+				<td>Central Park</td>
+				<td><button onclick="createUser(3)">Create</button></td>
+				<td><button class="remove" onclick="removeUser(3)">Remove</button></td>
+			</tr>
+			<tr>
+				<td>Benjamin Taylor</td>
+				<td>Ugur Mumcu Caddesi</td>
+				<td><button onclick="createUser(4)">Create</button></td>
+				<td><button class="remove" onclick="removeUser(4)">Remove</button></td>
+			</tr>
+			<tr>
+				<td>William Scott</td>
+				<td>Buca Spor Tesisleri</td>
+				<td><button onclick="createUser(5)">Create</button></td>
+				<td><button class="remove" onclick="removeUser(5)">Remove</button></td>
+			</tr>
+			<tr>
+				<td>Logan Clark</td>
+				<td>Hasanaga Bahcesi</td>
+				<td><button onclick="createUser(6)">Create</button></td>
+				<td><button class="remove" onclick="removeUser(6)">Remove</button></td>
+			</tr>
+			</table>
+		</div>
+		<div>
+			<table>
+				<tr>
+					<th>Actions</th>
+				</tr>
+				<tr>
+					<td><button style="background-color: green;" onclick="openSocket()">Open Socket</button></td>
+				</tr>
+				<tr>
+					<td><button style="background-color: red;" onclick="closeSocket()">Close Socket</button></td>
+				</tr>
+			</table>
+			<div>
+				<table>
+					<tr>
+						<th>Online User's UID List</th>
+					</tr>
+					<tr>
+						<td>
+							<ul style="list-style-type: circle;" id="user-uid-list">
+								<li>NoNe</li>
+							</ul>		
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div>
+			<table>
+				<tr>
+					<th colspan="2">Statistics</th>
+				</tr>
+				<tr>
+					<td>Current Client Count:</td>
+					<td><div id="client-count">NoNe<div></td>
+				</tr>
+				<tr>
+					<td>Test User Count:</td>
+					<td><div id="test-user-count">NoNe<div></td>
+				</tr>
+				<tr>
+					<td>Logged User Count:</td>
+					<td><div id="user-count">NoNe<div></td>
+				</tr>
+			</table>
+			<div>
+				<table>
+					<tr>
+						<th colspan="2">Information</th>
+					</tr>
+					<tr>
+						<td><b>Socket Status</b></td>
+						<td><div id="socket-status" >NoNe</div></td>
+					</tr>
+					<tr>
+						<td><b>Reason</b></td>
+						<td><div id="socket-status-reason" >...</div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

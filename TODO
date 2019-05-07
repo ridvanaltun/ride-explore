@@ -1,0 +1,77 @@
+Version 1:
+  ✔ Localhost üstünde bir nodejs server kur. @done (19-04-06 03:53)
+  ✔ Socket.io ile kullanıcının online offline durumunu tutan bir yapı oluştur. @high @done (19-04-18 11:46)
+  ✔ Kullanıcının online olma durumu netInfo yerine socket ile bağlantı durumuna bakarak yap. @high @done (19-04-06 03:54)
+  ✔ Kullanıcı lokasyonunu redux state'ine sürekli olarak kaydetmemiz gerekiyor. @high @done (19-04-18 11:46)
+  ✔ Kullanıcıların lokasyon bilgisi socket.io ile tüm kullanıcılara servis edilmeli. @high @done (19-04-11 14:31)
+  ✔ Diğer kullanıcıların lokasyon bilgisi mapview üstünde marker olarak render edilmeli. @high @done (19-04-20 22:39)
+  ☐ Register formu tasarımını bitir. @low
+  ☐ Term of use kısmını hazırla.  @low
+  ☐ Register sayfasında kullanıcıdan notification izni iste. @low
+  ☐ Kullanıcı ilk defa kayıt açarken sahip olmadığı bilgileri default değerler kaydettir. @high
+  ✔ Profile sayfasında bilgi değiştirme özelliklerini ekle. @low @done (19-05-08 01:10)
+  ☐ Splash screen, logo, loading animation kısmını hazırla. @low
+  ✔ Hesabımı kalıcı olarak sil, bildirimleri kapat özelliklerinin eklenmesi gerekiyor. @low @done (19-05-08 00:57)
+  ✘ Herhangi bir login tuşuna basınca tuşlara loading efekti verilmeli ve diğer tuşlar disable edilmeli. @low @cancelled (19-05-08 00:57) "Bunun yerine loading efekti kullanıyoruz o sayfada."
+  ✔ Facebook ve Google Auth butonları react-native-elements ile yeniden tasarlanmalı. @low @done (19-05-05 04:47)
+  ✔ Google MapStyle ile uygulamanın default haritası hazırlanmalı ve kullanılmalı. @low @done (19-05-05 04:47)
+  ✔ Kullanıcıların oturum açma yöntemi firebase ile kayıt altına alınmalı. @done (19-04-06 18:33)
+  ✔ Profile sayfasına kullanıcının üyelik giriş yöntemini görüntület. @low @done (19-05-05 05:00)
+  ☐ Mail ile giriş, şifremi unuttum sayfası, Mail ile kayıt sayfası eklenmeli. @low
+  ☐ Facebook ile giriş fonksiyonu tamamlanmalı. @low
+  ✔ Gps kapalı olması durumunda uygulama ilk defa açılırken sarı uyarıyı geçecek şekilde düzelt. @done (19-04-06 18:03)
+  ✔ ListenerSocket fonksiyonu asenkron yapmadan kullan, eğer sorun çıkmazsa asenkron özelliğini kaldır. @low @done (19-04-07 19:51)
+  ✔ Login socket'inin eventini destekleyen yapıyı sil ve veri almak için channel oluştur. @high @done (19-04-18 11:47)
+  ✔ Kullanıcı kendi bilgisini socket üstünden almamalı, zaten kendisi harita üstünde renderlanıyor. @high @done (19-04-18 11:47)
+  ✔ Current location map üstünde marker olarak basılacak, harita otomatik göstermeyecek. @high @done (19-04-11 14:28)
+  ✔ Kullanıcı arkadaşlarının marker rengini belirleyebilmeli. @low @done (19-05-05 05:00)
+  ✔ Check işleminde otomatik olarak bulunduğumuz lokasyona yönlendirmemeli. @low @done (19-05-05 05:00)
+  ✔ Eğer server restart attıysa kullanıcılar birdaha connect olduğu zaman login ve location bilgilerini güncellemeleri ve göndermeleri gerek server'a. @high @done (19-04-18 13:52)
+  ✔ mapRegion'ı current location'a ayarlayan bir button eklenmeli harita üstüne. @low @done (19-05-05 05:00)
+  ✔ About kısmına sınırlama getirilmeli ve çıkan balonlar daha az yer kaplamalı. @low @done (19-05-05 18:51)
+  ☐ Kullanıcı bilgisi socket üstünden gelmediği durumda düzenli olarka sunucudan bilgi talep et. @high
+  ✔ loading ekranında tüm işler bittikten sonra main ekranına navigate edilsin. @high @done (19-05-05 05:01)
+  ✔ Güncellemeyle birlikte gelen socket problemini çöz. @low @done (19-05-01 04:29)
+  ✔ Kullanıcı resimleri farklı boyutlarda kaydedilmeli ve db ye hepsi mantıkli bir sekilde kaydedilmeli. @high @done (19-05-05 05:01)
+  ☐ Sadece takip ettiklerim bana mesaj atabilsin özelliği olmalı. @low
+  ✔ Bottom Tab Navigator'e animasyonlar eklenmeli, olmuyorsa değiştirilmeli. @low @done (19-05-05 05:01)
+  ☐ Iconların hızlı render edilmesi için ne yapmak gerekiyor araştır. @low
+  ☐ Kullanıcılar sadece uid ve lokasyon bilgisi göndermeli, telefon üstünden database ile iletişim kurarak diger bilgiler alınmalı.
+  ✔ Explore menüsü içindeki person sayfası chat menüsüne taşınmalı. @low @done (19-05-06 01:57)
+  ✔ Expolore haritasında balona tıklayınca ortaya modal olarak kullanıcı bilgisi sunulmalı. @low @done (19-05-06 02:46)
+  ☐ Settings sayfasındaki modalları komponenet haline getir. @low
+  ☐ Explore sayfasındaki modalı component haline getir. @low
+  ☐ Loading ekranında hangi işlemin yapıldığı gösterilmeli. @low
+  ☐ Socket ile client arasında nadir oluşan bir hata var, bu hatayı çöz. @low
+
+Version 2:
+  ☐ ExpoKit'e geçilmeli. @high @high
+  ☐ ExpoKit için Google Auth fonksiyonları ExpoKit'e göre düzeltilmeli. 
+  ☐ Gps ve permission kontrol yapan timer kaldırılmalı yerine event bazlı bir çözüm getirilmeli.
+  ☐ Socket ile gelen veriyi minimuma indirmeli ve 200ms yerine 1s'de bir işlemeliyiz.
+  ✔ Offline gezinebilme entegrasyonu hazırlanmalı. @high @done (19-04-14 01:52)
+  ☐ Kullanıcı mapstyle'ı değiştirebilmeli. @low
+  ☐ Performansı arttırmak için liste ekleme-çıkarma algoritması yazılmalı, location verisi izole edilmeli, bu haliyle çöp bir uygulama. @high @high
+  ☐ Kullanıcılar kendine aig harita üstünde render edielcekleri logoyu seçebilsinler. @low
+  ☐ Follows ve Messages kısmında yukarıya çık elementi olmalı. @low
+  ☐ Haritadan uzaklaşınca pinler bölgeye göre farklı bölgedeki kullanıcı sayısını belirtecek şekilde render edilmeli. @high
+  ☐ KeyboardSpacer elementi kaldırılıp giftedchat için android düzeltmesi yapılması gerekiyor. @low
+  ☐ Performasn ve hız için Gifted chatten aurora kütüphanesine geç. @low
+  ☐ Expokit ile birlikte uygulamanın arkaplanda çalışmasını sağla ki lokasyona güncellenebilsin. @high
+  ☐ IOS için safearea kompenenti ile IOS 11 ve Iphone X cihazlarının çentiğine uygun harita tasarımı. @low
+
+Extra:
+  ☐ Eslint ile Airbnb'nin yazım kurallarını tüm projeye uygula. @low
+  ✔ Follow listesindeki insanların markerlarının renklerini özelleştir. @done (19-05-08 00:59)
+  ☐ Feed screen'i hallet.
+  ☐ Çoklu dil desteği ekle.
+  ☐ Firebase push notification desteği ekle.
+  ☐ Kullanıcı harita üstünde bir nokta seçip buluşma noktası olarak ayarlayabilmeli.
+  ☐ Yeni version bilgisi internetten .json çekerek uygulama içinde tutulmalı ki aksiyon alabilelim.
+  ✔ Kullanıcı haritada hangi renk marker görüneceğini belirleyebilsin. @done (19-05-08 01:00)
+  ☐ Repost this user özelliği getirilmeli.
+  ☐ Kullanıcıya mesaj geldiğinde tab navigator nesnesi üstünde kırmızı balon şeklinde gösterilmeli.
+  ☐ ReactJS ile uygulamaya bir admin paneli hazırlanmalı.
+  ☐ Kullanıcılar facebook, twitter gibi platformlarda profillerini paylaşabilmeli.
+  ☐ Feed ekranındaki şeyler bir admin paneli üstünden güncelleme, ekleme ve silme işlemelri yapılabilmeli.
+  ☐ Feed alanındaki içerikler kullanıcının ilgi alanı seçimi neyse ona göre kullanıcıya özel render edilmeli.

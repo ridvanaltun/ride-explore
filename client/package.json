@@ -1,0 +1,42 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "startx": "expo start --android --localhost",
+    "startxc": "expo start -c --android --localhost",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject",
+    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "expo": "32.0.0",
+    "firebase": "^5.9.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-dialog-input": "^1.0.7",
+    "react-native-elements": "^1.1.0",
+    "react-native-emoji": "^1.5.0",
+    "react-native-gifted-chat": "^0.7.3",
+    "react-native-modal": "^10.0.0",
+    "react-native-modal-datetime-picker": "^7.4.0",
+    "react-native-modal-selector": "^1.0.3",
+    "react-native-tab-view": "^2.2.0",
+    "react-navigation": "^3.0.9",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-persist": "^5.10.0",
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "2.1.1"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "jest-expo": "^32.0.0"
+  },
+  "private": true
+}

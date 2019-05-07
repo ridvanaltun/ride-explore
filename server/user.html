@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<title id="title">USER INFO</title>
+
+  	<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-auth.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-database.js"></script>
+	<script src="./configs/firebase.js"></script>
+
+	<script>
+		getQueryParams = (qs) => {
+		    qs = qs.split('+').join(' ');
+
+		    let params = {},
+		        tokens,
+		        re = /[?&]?([^=]+)=([^&]*)/g;
+
+		    while (tokens = re.exec(qs)) {
+		        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+		    }
+
+		    return params;
+		}
+
+		const default_picture = "./src/image/default-profile-picture.jpg";
+
+		let query = getQueryParams(document.location.search);
+
+		firebase.database().ref("/users/" + query.uid ).on("value", (snapshot) =>{
+			const user = snapshot.val();
+			document.getElementById("title").innerHTML = (user.name || "Undefined") + ' ' + (user.surname || "Undefined");
+			document.getElementById("name").innerHTML = user.name || "Undefined";
+			document.getElementById("surname").innerHTML = user.surname || "Undefined";
+			document.getElementById("birthdate").innerHTML = user.birthdate || "Undefined";
+
+			let img = document.createElement("img");
+			img.src = user.image_minified || default_picture;
+			img.height = 200;
+			img.width = 200;
+			img.setAttribute('style', "border-radius:50%");
+			let photo = document.getElementById("photo");
+			photo.appendChild(img);
+
+			document.getElementById("about").innerHTML = user.about || "Undefined";
+			document.getElementById("uid").innerHTML = user.uid || "Undefined";
+			document.getElementById("locale").innerHTML = user.locale || "Undefined";
+			document.getElementById("email").innerHTML = user.email || "Undefined";
+			document.getElementById("verified").innerHTML = user.verified || "Undefined";
+        });
+
+	</script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>Name</td>
+			<td>:</td>
+			<td id="name">..</td>
+		</tr>
+		<tr>
+			<td>Surname</td>
+			<td>:</td>
+			<td id="surname">..</td>
+		</tr>
+		<tr>
+			<td>Birthdate</td>
+			<td>:</td>
+			<td id="birthdate">..</td>
+		</tr>
+		<tr>
+			<td>Photo</td>
+			<td>:</td>
+			<td id="photo"></td>
+		</tr>
+		<tr>
+			<td>About</td>
+			<td>:</td>
+			<td id="about">..</td>
+		</tr>
+		<tr>
+			<td>UID</td>
+			<td>:</td>
+			<td id="uid">..</td>
+		</tr>
+		<tr>
+			<td>Locale</td>
+			<td>:</td>
+			<td id="locale">..</td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td>:</td>
+			<td id="email">..</td>
+		</tr>
+		<tr>
+			<td>Verified</td>
+			<td>:</td>
+			<td id="verified">..</td>
+		</tr>
+	</table>	
+</body>
+</html>
