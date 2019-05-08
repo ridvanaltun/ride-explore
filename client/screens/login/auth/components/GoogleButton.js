@@ -85,7 +85,7 @@ class GoogleButton extends React.Component{
 	              });
 
 	              console.log('LOGIN: NEW USER CREATED USING GOOGLE AUTH');
-	              this.props.navigation.navigate('Register', {uid: result.user.uid});
+	              this.props.navigation.navigate('CompleteRegister', {uid: result.user.uid});
 	            }
 	            else{
 	              console.log('LOGIN: USER SIGN-IN USING GOOGLE AUTH');
@@ -108,7 +108,7 @@ class GoogleButton extends React.Component{
 	        firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(snapshot => { 
 	          if(snapshot.val().verified === false && snapshot.val().online === undefined){
 	            this.props.setPersonData(snapshot.val());
-	            this.props.navigation.navigate('Register', {uid: snapshot.val().uid});
+	            this.props.navigation.navigate('CompleteRegister', {uid: snapshot.val().uid});
 	          }else{
 	            console.log('LOGIN: USER ALREADY SIGNED-IN');
 	            Alert.alert('User already connected!', 'You are already in there!');

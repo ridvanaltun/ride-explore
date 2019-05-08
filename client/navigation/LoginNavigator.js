@@ -3,16 +3,18 @@ import { createStackNavigator } from 'react-navigation';
 
 // Auth
 import AuthScreen from '../screens/login/auth/AuthScreen';
-import RegisterScreen from '../screens/login/auth/RegisterScreen';
 
 // Email
 import SignInScreen from '../screens/login/email/SignInScreen';
 import SignUpScreen from '../screens/login/email/SignUpScreen';
 import ForgotPasswordScreen from '../screens/login/email/ForgotPasswordScreen';
 
+// Ortak
+import CompleteRegisterScreen from '../screens/login/CompleteRegisterScreen';
+
 export default createStackNavigator({
   Auth: AuthScreen,
-  Register: RegisterScreen,
+  CompleteRegister: CompleteRegisterScreen,
   SignIn: SignInScreen,
   SignUp: SignUpScreen,
   ForgotPassword: ForgotPasswordScreen

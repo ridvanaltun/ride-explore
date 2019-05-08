@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, StyleSheet } from 'react-native';
 
 class MessagesRoute extends React.Component{
   constructor(props){
@@ -10,10 +9,7 @@ class MessagesRoute extends React.Component{
   render(){
     return(
       <View style={styles.scene}>
-        <Button 
-          title='Get redux state'
-          onPress={() => {console.log(this.props.followedUserList);}}
-        />
+        <Text>Hello</Text>
       </View>
     );
   }

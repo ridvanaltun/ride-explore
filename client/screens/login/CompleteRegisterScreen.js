@@ -4,16 +4,18 @@ import { Button, Icon, ListItem, Card } from 'react-native-elements';
 import firebase from 'firebase';
 import Moment from 'moment';
 
+import PickImage from '../../lib/PickImage';
+
 // Modals
 import Modal from 'react-native-modal';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 // Constants
-import Fonts from '../../../constants/Fonts';
+import Fonts from '../../constants/Fonts';
 
 // Redux
 import { connect } from 'react-redux';
-import { setPersonData } from '../../../redux/collection';
+import { setPersonData } from '../../redux/collection';
 
 const mapStateToProps = (state) => {
   return{
@@ -27,12 +29,11 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-class RegisterScreen extends React.Component {
+class CompleteRegisterScreen extends React.Component {
   static navigationOptions = {
     title: 'Registration',
     headerTransparent: true,
     headerStyle: { borderBottomWidth: 0 }
-    //header: null
   };
 
   constructor(props) {
@@ -45,10 +46,6 @@ class RegisterScreen extends React.Component {
       terms: true,
       notification: true
     }
-  }
-
-  pickImage = () => {
-    console.log('pick image..');
   }
 
   onRegisterPress = () => {
@@ -67,7 +64,21 @@ class RegisterScreen extends React.Component {
       .update({ birthdate: Moment(date).format('D MMM YY') })
       .then(() => this.setState({ isDateTimePickerVisible: false }))
       .catch(err => console.log('[ERROR] -> [FIRBASE] --> [handleDatePicked] ---> ', err));
-  };
+  }
+
+  onChangeAboutPress = () => {
+    if(this.state.about != ''){
+
+      firebase.database().ref('/users/' + this.props.personData.uid)
+        .update({ about: this.state.about })
+        .catch(err => console.log('ERROR -> [FIREBASE] -> [onChangeAboutPress] ---> ', err));
+
+      this.setState({ isAboutModalVisible: false });
+
+    }else{
+      Alert.alert('About Text', 'About text can not be empty.');
+    }
+  }
 
   renderDataTimePicker = () => {
     return(
@@ -79,43 +90,84 @@ class RegisterScreen extends React.Component {
     );
   }
 
+  renderAboutModal = () => {
+    return(
+      <Modal
+        isVisible={this.state.isAboutModalVisible}
+        onBackButtonPress={() => this.setState({ isAboutModalVisible: false })}
+        onBackdropPress={() => this.setState({ isAboutModalVisible: false })}
+      >
+        <View style={{ backgroundColor: "white", padding: 22, borderRadius: 4, borderColor: "rgba(0, 0, 0, 0.1)", }}>
+          <Text style={{ fontSize: 20, marginBottom: 12 }}>Change Your About</Text>
+          <View style={{ fontSize: 15, padding: 15 }}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>About</Text>
+            <TextInput 
+              placeholder={this.props.personData.about}
+              placeholderTextColor='gray'
+              editable={true}
+              maxLength={140}
+              onChangeText={(text) => this.setState({ about: text })}
+              multiline={true}
+              numberOfLines={5}
+              style={{ height: 120, textAlignVertical: 'top', padding: 10, margin: 15, borderColor: "#7a42f4", borderWidth: 1 }}
+            />
+          </View>
+          <View style={{ flexDirection: 'row', margin: 12 }}>
+            <Button
+              onPress={() => this.onChangeAboutPress()}
+              type='clear'
+              title="Apply"
+            />
+            <Button
+              onPress={() => this.setState({ isAboutModalVisible: false })}
+              type='clear'
+              title="Close"
+            />
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+
   render(){
     return(
        <View style={styles.container}>
         {this.renderDataTimePicker()}
-          <TouchableOpacity style={styles.userImageContainer} onPress={() => this.pickImage()}>
-            <Image
-              style={styles.userImage}
-              //defaultSource={defaultProfileImage}
-              source={{ uri: this.props.personData.image_minified }}
-            />
-          </TouchableOpacity>
+        {this.renderAboutModal()}
+        <TouchableOpacity style={styles.userImageContainer} onPress={() => PickImage(this.props.personData.uid)}>
+          <Image
+            style={styles.userImage}
+            //defaultSource={defaultProfileImage}
+            source={{ uri: this.props.personData.image_minified }}
+          />
+        </TouchableOpacity>
         <View style={{ alignItems: 'flex-end' }}>
         <Card>
           <ListItem
+            onPress={() => this.setState({ isDateTimePickerVisible: true })}
             title="Pick Your Birthdate"
             containerStyle={styles.listItemContainer}
             rightElement={
               <Icon
                 type='antdesign'
-                name="checkcircle"
+                name={this.props.personData.birthdate === undefined ? 'checkcircleo' : 'checkcircle'}
                 size={25}
-                color="blue"
+                color={this.props.personData.birthdate === undefined ? "#B2DFD8" : "#41AD49"}
                 iconStyle={{ paddingRight: 10 }} 
               />
             }
           />
 
           <ListItem
-            onPress={() => console.log('asd')}
+            onPress={() => this.setState({ isAboutModalVisible: true })}
             title="Write About Yourself"
             containerStyle={styles.listItemContainer}
             rightElement={
               <Icon
                 type='antdesign'
-                name="checkcircle"
+                name={this.props.personData.about === undefined ? 'checkcircleo' : 'checkcircle'}
                 size={25}
-                color="blue"
+                color={this.props.personData.about === undefined ? "#B2DFD8" : "#41AD49"}
                 iconStyle={{ paddingRight: 10 }} 
               />
             }
@@ -155,24 +207,19 @@ class RegisterScreen extends React.Component {
           </Card>
 
         </View>
-      {/*
-        Buradaki hata mesajını projeye eklemek gerekiyor
-        <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>Error logging in. Please try again.</Text>
-        <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>{signUpErrorMessage}</Text>   
-      */}
-        </View>
+      </View>
     );
   }
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CompleteRegisterScreen);
 
 const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 12,
     marginTop: 10,
-    color: 'transparent',
+    color: "transparent",
     fontFamily: Fonts.lato.base
   },
   container: {
@@ -200,7 +247,5 @@ const styles = StyleSheet.create({
   listItemContainer: {
     height: 40,
     width: 280
-    //borderWidth: 0.5,
-    //borderColor: '#ECECEC',
   }
 });

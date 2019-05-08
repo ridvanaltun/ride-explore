@@ -1,16 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, TextInput } from 'react-native';
+import { View, StyleSheet, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import firebase from 'firebase';
-
-// Components
-import Button from './components/Button';
-import Input from './components/Input';
-
-// Constanta
-import Fonts from '../../../constants/Fonts';
-
-// For term of use
-import Modal from 'react-native-modal';
 
 // Redux..
 import { connect } from 'react-redux';
@@ -31,7 +21,8 @@ const mapDispatchToProps = (dispatch) => {
 class SignUpScreen extends React.Component {
   static navigationOptions = {
     title: 'Email Registration',
-    header: null
+    headerTransparent: true,
+    headerStyle: { borderBottomWidth: 0 }
   };
 
   constructor(props) {
@@ -45,7 +36,7 @@ class SignUpScreen extends React.Component {
     };
   }
 
-  onSignUpPress = async (email, password, passwordConfirm) => {
+  onSignUpPress = async (name, surname, email, password, passwordConfirm) => {
 
     if (password !== passwordConfirm){
 
@@ -89,137 +80,89 @@ class SignUpScreen extends React.Component {
   }
 
   render(){
-    const { email, password, passwordConfirm } = this.state;
+    const { name, surname, email, password, passwordConfirm } = this.state;
     return(
-      <View style={{ paddingTop: 60, alignItems: 'center' }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled>
+      <View style={styles.container}>
+        <TextInput
+          placeholder="Name"
+          style={[styles.textInput, { marginTop: 40 }]}
+          autoCapitalize='none'
+          autoCorrect={false}
+          onChangeText={(text) =>  this.setState({ name: text })}
+        />
 
         <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={email}
-          onChangeText={(text) =>  this.setState({ email: text })}
-          placeholder='Email'
+          placeholder="Surname"
+          style={styles.textInput}
+          autoCapitalize='none'
+          autoCorrect={false}
+          onChangeText={(text) =>  this.setState({ surname: text })}
+        />
+
+        <TextInput
+          placeholder="Email"
+          style={styles.textInput}
           keyboardType='email-address'
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) =>  this.setState({ email: text })}
         />
-
-        <View style={{ paddingTop: 10 }} />
-
         <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={password}
-          onChangeText={(text) => this.setState({ password: text })}
-          placeholder='Password'
+          placeholder="Password"
+          style={styles.textInput}
           secureTextEntry={true}
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) =>  this.setState({ password: text })}
         />
 
-        <View style={{ paddingTop:10 }} />
-
         <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={passwordConfirm}
-          onChangeText={(text) => this.setState({ passwordConfirm: text })}
-          placeholder='Password (confirm)'
+          placeholder="Password (confirm)"
+          style={[styles.textInput, { marginBottom: 20 }]}
           secureTextEntry={true}
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) =>  this.setState({ passwordConfirm: text })}
         />
 
-        <View style={{paddingTop:10}} />
-
-        <Button title='Signup' onPress={() => this.onSignUpPress(email, password, passwordConfirm)} />
-        <Button title='Back to Login' onPress={()=>this.props.navigation.goBack()} />
+        <TouchableOpacity
+          onPress={() => this.onSignUpPress(name, surname, email, password, passwordConfirm)}
+          style={[styles.button]}
+        >
+          <Text style={{ color: "white", fontSize: 20, fontWeight: '600' }}>
+            SIGN UP
+          </Text>
+        </TouchableOpacity>
       </View>
-/*
-       <View style={styles.container}>
-        <View style={styles.heading}>
-        </View>
-        <Text style={styles.greeting}>
-          Welcome,
-        </Text>
-        <Text style={styles.greeting2}>
-          sign up to continue
-        </Text>
-        <View style={styles.inputContainer}>
-          <Input
-            value={this.state.name}
-            placeholder='Name'
-            type='username'
-            onChangeText={(name) => this.setState({ name: name })}
-          />
-          <Input
-            value={this.state.surname}
-            placeholder='Surname'
-            type='username'
-            onChangeText={(surname) => this.setState({ surname: surname })}
-          />
-          <Input
-            value={this.state.email}
-            placeholder='Email'
-            type='email'
-            onChangeText={(email) => this.setState({ email: email })}
-          />
-          <Input
-            value={this.state.password}
-            placeholder='Password'
-            secureTextEntry
-            type='password'
-            onChangeText={(password) => this.setState({ password: password })}
-          />
-        </View>
-        <Button
-          title='Sign Up'
-          onPress={() => this.onRegisterPress()}
-          isLoading={false}
-        />
-  
-        </View>
-*/
+      </KeyboardAvoidingView>
     );
   }
-
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
 
 const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  heading: {
-    flexDirection: 'row'
-  },
-  headingImage: {
-    width: 38,
-    height: 38
-  },
-  errorMessage: {
-    fontSize: 12,
-    marginTop: 10,
-    color: 'transparent',
-    fontFamily: Fonts.lato.base
-  },
-  inputContainer: {
-    marginTop: 20
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 40
+    paddingHorizontal: 26,
+    paddingTop: 26,
+    paddingBottom: 18
   },
-  greeting: {
-    marginTop: 20,
-    fontSize: 24,
-    fontFamily: Fonts.lato.light
+  textInput: {
+    height: 60,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: "#ECF0F3",
+    paddingHorizontal: 19,
+    marginTop: 10
   },
-  greeting2: {
-    color: '#666',
-    fontSize: 24,
-    marginTop: 5,
-    fontFamily: Fonts.lato.light
+  button: {
+    height: 60,
+    borderRadius: 3,
+    backgroundColor: "#11B8FF",
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

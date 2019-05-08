@@ -68,7 +68,7 @@ export default class PersonalChatScreen extends React.Component {
 
   render() {
     return(
-      <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={75} behavior="padding" enabled>
+      <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={75} behavior='padding' enabled>
       <View style={{ flex: 1 }}>
       	<GiftedChat
           messages={this.state.messages}

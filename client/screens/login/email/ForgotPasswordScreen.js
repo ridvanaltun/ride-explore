@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
 
 class ForgotPasswordScreen extends React.Component {
   static navigationOptions = {
     title: 'Reset Your Password',
-    //header: null,
+    headerTransparent: true,
+    headerStyle: { borderBottomWidth: 0 }
   };
 
   constructor(props) {
@@ -41,36 +42,63 @@ class ForgotPasswordScreen extends React.Component {
 
   render(){
     return(
-      <View style={{ paddingTop: 50, alignItems: 'center' }}>
-
-        <Text>Forgot Password</Text>
-
+      <View style={styles.container}>
         <TextInput
-          style={{ width: 200, height: 40, borderWidth: 1 }}
-          value={this.state.email}
-          onChangeText={(text) => this.setState({ email: text })}
           placeholder='Email'
+          style={[styles.textInput, { marginTop: 40, marginBottom: 20 }]}
           keyboardType='email-address'
           autoCapitalize='none'
           autoCorrect={false}
+          onChangeText={(text) =>  this.setState({ email: text })}
         />
 
-        <View style={{ paddingTop: 10 }} />
-
-        <Button 
-          title='Reset Password' 
-          onPress={() => MailAuth.onResetPasswordPress(this.state.email)} 
-        />
-
-        <View style={{ paddingTop: 10 }} />
-
-        <Button 
-          title='Back to Login' 
-          onPress={() => this.props.navigation.goBack()} 
-        />
+          <TouchableOpacity
+            onPress={() => this.onResetPasswordPress(this.state.password)}
+            style={[styles.button]}
+          >
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}>
+              RESET PASSWORD
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+          style={{
+            alignSelf: 'flex-end',
+            height: 40,
+            justifyContent: 'center',
+            marginBottom: 20
+          }}
+        >
+          <Text style={{ color: "#BDC3C6", fontSize: 15 }}>
+            Need Help?
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
 }
 
 export default ForgotPasswordScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 26,
+    paddingTop: 26,
+    paddingBottom: 18
+  },
+  textInput: {
+    height: 60,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#ECF0F3',
+    paddingHorizontal: 19
+  },
+  button: {
+    height: 60,
+    borderRadius: 3,
+    backgroundColor: '#11B8FF',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});

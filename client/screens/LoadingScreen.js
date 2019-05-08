@@ -213,8 +213,8 @@ class LoadingScreen extends React.Component {
               console.log('LOGIN STATUS: COMPLETE');
               this.props.navigation.navigate('Main');
             }else{
-              console.log('LOGIN STATUS: REGISTER');
-              this.props.navigation.navigate('Register', { uid: this.props.personData.uid });
+              console.log('LOGIN STATUS: COMPLETE REGISTER');
+              this.props.navigation.navigate('CompleteRegister', { uid: this.props.personData.uid });
             }
 
           }else{
@@ -225,8 +225,8 @@ class LoadingScreen extends React.Component {
               .then((snapshot) => {
 
                 if(snapshot.val().verified === false){
-                  console.log('LOGIN STATUS: REGISTER');
-                  this.props.navigation.navigate('Register', { uid: user.uid });
+                  console.log('LOGIN STATUS: COMPLETE REGISTER');
+                  this.props.navigation.navigate('CompleteRegister', { uid: user.uid });
                 }else{
                   console.log('LOGIN STATUS: COMPLETE');
                   this.props.navigation.navigate('Main');
