@@ -88,7 +88,6 @@ export default class App extends React.Component {
         require('./assets/images/default-profile-picture.png')
       ]),
       Font.loadAsync({
-        // This is the font that we are using for our tab bar
         ...Icon.Ionicons.font,
         'Lato-Hairline': require('./assets/fonts/Lato-Hairline.ttf'),
         'Lato-Light': require('./assets/fonts/Lato-Light.ttf'),
@@ -99,8 +98,6 @@ export default class App extends React.Component {
   };
 
   _handleLoadingError = error => {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
     console.warn(error);
   };
 

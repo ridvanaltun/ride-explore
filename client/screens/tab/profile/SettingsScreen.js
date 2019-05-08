@@ -48,7 +48,7 @@ class SettingsScreen extends Component {
             firebase.auth().signOut();
             socket.disconnect();
             socket.connect();
-            navigation.navigate('Auth');
+            navigation.navigate('Login');
           }}
           type='clear'
         />

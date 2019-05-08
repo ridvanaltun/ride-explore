@@ -1,13 +1,13 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import AuthNavigator from './AuthNavigator';
-import MainTabNavigator from './MainTabNavigator';
 import LoadingScreen from '../screens/LoadingScreen';
+import LoginNavigator from './LoginNavigator';
+import MainTabNavigator from './MainTabNavigator';
 
 export default createAppContainer(createSwitchNavigator({
   Loading: LoadingScreen,
-  Auth: AuthNavigator,
+  Login: LoginNavigator,
   Main: MainTabNavigator,
 },
 {

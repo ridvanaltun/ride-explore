@@ -222,7 +222,7 @@ class LoadingScreen extends React.Component {
 
             firebase.database().ref('/users/' + user.uid)
               .once('value')
-              .then( (snapshot) => {
+              .then((snapshot) => {
 
                 if(snapshot.val().verified === false){
                   console.log('LOGIN STATUS: REGISTER');
@@ -251,7 +251,7 @@ class LoadingScreen extends React.Component {
 
       	}else{
           console.log('LOGIN MODE: AUTH');
-      		this.props.navigation.navigate('Auth');
+      		this.props.navigation.navigate('Login');
       	}
   		});
 	}
