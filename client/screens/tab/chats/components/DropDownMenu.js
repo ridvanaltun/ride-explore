@@ -15,7 +15,6 @@ class DropDownMenu extends React.Component {
 
   // 3 noktali buton implement edilene kadar oerson sayfasına götüren geçici bir çözüm
   onPersonButtonPress = () => {
-    console.log(this.props.user.name);
     NavigationService.navigate('Person', {
       uid: this.props.user.uid,
       name: this.props.user.name,

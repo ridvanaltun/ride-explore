@@ -35,7 +35,7 @@ export default reducer = (state = initialState, action) => {
         case "setFollowedUserList":
             return { ...state, followedUserList: action.value };
 
-        case "appendFollowedUserList":
+        case "appendItemFollowedUserList":
             return { ...state, followedUserList: [ ...state.followedUserList, action.value] };
 
         case "setBlockedUserList":
@@ -46,6 +46,9 @@ export default reducer = (state = initialState, action) => {
 
         case "setIsLoading":
             return { ...state, isLoading: action.value };
+
+        case "setMessages":
+            return { ...state, messages: action.value };
 
         default:
             return state;
@@ -126,9 +129,9 @@ const setFollowedUserList = (followedUserList) => {
     };
 }
 
-const appendFollowedUserList = (followedUserList) => {
+const appendItemFollowedUserList = (followedUserList) => {
     return {
-        type: "appendFollowedUserList",
+        type: "appendItemFollowedUserList",
         value: followedUserList
     };
 }
@@ -154,6 +157,13 @@ const setIsLoading = (isLoading) => {
     };
 }
 
+const setMessages = (messages) => {
+    return {
+        type: "setMessages",
+        value: messages
+    };
+}
+
 export {
     setSocketID,
     setIsAppOnForeground,
@@ -165,8 +175,9 @@ export {
     setPersonData,
     setOnlineUserList,
     setFollowedUserList,
-    appendFollowedUserList,
+    appendItemFollowedUserList,
     setBlockedUserList,
     setApplyMapRegion,
-    setIsLoading
+    setIsLoading,
+    setMessages
 };

@@ -17,7 +17,10 @@ import {
   setOnlineUserList, 
   setLocation,
   setPermissionStatus,
-  setServiceStatus
+  setServiceStatus,
+  setMessages,
+  appendItemFollowedUserList,
+  setFollowedUserList
 } from '../redux/collection';
 
 const mapStateToProps = (state) => {
@@ -29,7 +32,9 @@ const mapStateToProps = (state) => {
     onlineUserList: state.onlineUserList,
     location: state.location,
     serviceStatus: state.serviceStatus,
-    permissionStatus: state.permissionStatus
+    permissionStatus: state.permissionStatus,
+    messages: state.messages,
+    followedUserList: state.followedUserList
   };
 }
 
@@ -42,7 +47,10 @@ const mapDispatchToProps = (dispatch) => {
     setOnlineUserList: (list) => { dispatch(setOnlineUserList(list)) },
     setLocation: (coords) => { dispatch(setLocation(coords)) },
     setServiceStatus: (status) => { dispatch(setServiceStatus(status)) },
-    setPermissionStatus: (status) => { dispatch(setPermissionStatus(status)) }
+    setPermissionStatus: (status) => { dispatch(setPermissionStatus(status)) },
+    setMessages: (object) => { dispatch(setMessages(object)) },
+    appendItemFollowedUserList: (list) => {dispatch(appendItemFollowedUserList(list))},
+    setFollowedUserList: (list) => {dispatch(setFollowedUserList(list))}
   };
 }
 
@@ -69,6 +77,75 @@ class LoadingScreen extends React.Component {
   // Need expokit..
   listenerServices = () => {
     console.log('listener of services later..');
+  }
+
+  listenerFollows = (uid) => {
+
+    firebase.database().ref('/users/' + uid + '/follows/').on('value', (snapshot) => { 
+
+      this.props.setFollowedUserList([]);
+      const followed_uid_list = snapshot.val();
+
+      followed_uid_list.forEach(uid => {
+        firebase.database().ref('/users/' + uid).once('value').then(snapshot => {
+          const user = {
+            uid: snapshot.val().uid,
+            name: snapshot.val().name,
+            surname: snapshot.val().surname,
+            image_minified: snapshot.val().image_minified,
+            about: snapshot.val().about
+          }
+          this.props.appendItemFollowedUserList(user);
+        });
+
+
+      });
+
+    });
+  }
+
+  listenerMessages = async (uid) => {
+
+    let messages = {};
+
+    // delivered kanalındaki tüm mesajları messages nesnesinde topluyoruz
+    // Redux-persist üstünde aynı veri olduğunda indirme işlemini atlayacak bir yapıya ihtiyaç var.
+    await firebase.database().ref('/users/' + uid + '/messages/delivered/').once('value').then((snapshot) => {
+      if(snapshot.val() !== null){ messages = snapshot.val(); }
+    });
+
+    // undelivered kanalındaki tüm mesajları messages nesnesine topluyoruz
+    await firebase.database().ref('/users/' + uid + '/messages/undelivered/').once('value').then((snapshot) => {
+      if(snapshot.val() !== null){
+        const undelivered = snapshot.val();
+        undelivered.forEach((message)=> {
+          if(messages[message.uid] === undefined){ messages[message.uid]=[]; }
+          messages[message.uid].push({ text: message.text, date: message.date });
+        });
+      }
+    });
+
+    // delivered kanalını doldurup undelivered kanalını boşaltıyoruz
+    await firebase.database().ref('/users/' + uid + '/messages/delivered/').update(messages).then(() => {
+      this.props.setMessages(messages);
+      firebase.database().ref('/users/' + uid + '/messages/undelivered/').set([]);
+    });
+
+    // undelivered kanalı üstündeki değişiklikleri listener ile takip ediyoruz 
+    firebase.database().ref('/users/' + uid + '/messages/undelivered/').on('value', (snapshot)=> {
+      if(snapshot.val() !== null){
+        const undelivered = snapshot.val();
+        undelivered.forEach((message)=> {
+          if(messages[message.uid] === undefined){ messages[message.uid]=[]; }
+          messages[message.uid].push({ text: message.text, date: message.date });
+        });
+        // değişiklikleri uyguluyoruz
+        firebase.database().ref('/users/' + uid + '/messages/delivered/').update(messages).then(() => {
+          this.props.setMessages(messages);
+          firebase.database().ref('/users/' + uid + '/messages/undelivered/').set([]);
+        });
+      }
+    });
   }
 
   listenerPersonData = (uid) => {
@@ -237,6 +314,8 @@ class LoadingScreen extends React.Component {
                 .then( () => {
                   this.props.setPersonData(snapshot.val());
                   this.listenerPersonData(user.uid);
+                  this.listenerMessages(user.uid);
+                  this.listenerFollows(user.uid);
                 })
                 .catch((error) => { console.log('ERROR -> [FIREBASE] --> [last_logged_in] --->  ', error);
               });

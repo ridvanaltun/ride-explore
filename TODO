@@ -66,7 +66,6 @@ Extra:
   ☐ Feed screen'i hallet.
   ☐ Çoklu dil desteği ekle.
   ☐ Firebase push notification desteği ekle.
-  ☐ Kullanıcı harita üstünde bir nokta seçip buluşma noktası olarak ayarlayabilmeli.
   ☐ Yeni version bilgisi internetten .json çekerek uygulama içinde tutulmalı ki aksiyon alabilelim.
   ✔ Kullanıcı haritada hangi renk marker görüneceğini belirleyebilsin. @done (19-05-08 01:00)
   ☐ Repost this user özelliği getirilmeli.
@@ -75,3 +74,8 @@ Extra:
   ☐ Kullanıcılar facebook, twitter gibi platformlarda profillerini paylaşabilmeli.
   ☐ Feed ekranındaki şeyler bir admin paneli üstünden güncelleme, ekleme ve silme işlemelri yapılabilmeli.
   ☐ Feed alanındaki içerikler kullanıcının ilgi alanı seçimi neyse ona göre kullanıcıya özel render edilmeli.
+
+  Ideas:
+
+  ☐ Sadece bulunduğumuz bölgedeki kullanıcılar gözüksün haritada, haritaya bulunduğumuz bölgeye göre polygon çizdirmemiz ve ona göre sunucudan data talep etmeli ve almalıyız.
+  ☐ Kullanıcı harita üstünde bir nokta seçip buluşma noktası olarak ayarlayabilmeli.

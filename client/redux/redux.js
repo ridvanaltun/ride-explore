@@ -43,13 +43,14 @@ const initialState = {
     followedUserList: [ ],
     blockedUserList: [ ],
     applyMapRegion: false,
-    isLoading: false
+    isLoading: false,
+    messages: { }
 };
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['personData', 'followedUserList', 'blockedUserList']
+    whitelist: ['personData', 'messages']
 }
 
 const enhancers = [];

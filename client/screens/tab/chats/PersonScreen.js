@@ -301,19 +301,18 @@ class  PersonScreen extends React.Component {
 
   onSaveToFollowListPress = () => {
 
-    if(this.props.personData.follows != undefined){
-      const followed_user_list = this.props.personData.follows;
-    }else{
-      const followed_user_list = [];
+    let followed_user_list = [];
+
+    if(this.props.personData.follows !== undefined){
+      followed_user_list = this.props.personData.follows;
     }
 
     followed_user_list.push(this.state.user.uid);
 
     firebase.database().ref('/users/' + this.props.personData.uid)
       .update({ follows: followed_user_list })
-      .then( () => { this.setState({ isUserFollowed: true }); })
-      .catch((error) => { console.log('ERROR : [onSaveToYourListPress] -->  ', error);
-    }); 
+      .then(() => this.setState({ isUserFollowed: true }))
+      .catch((error) => console.log('ERROR : [onSaveToYourListPress] -->  ', error)); 
   }
 
   onRemoveFromFollowListPress = () => {
@@ -322,7 +321,7 @@ class  PersonScreen extends React.Component {
 
     firebase.database().ref('/users/' + this.props.personData.uid)
       .update({ follows: followed_user_list })
-      .then( () => { this.setState({ isUserFollowed: false }); })
+      .then(() => { this.setState({ isUserFollowed: false }); })
       .catch((error) => { console.log('ERROR : [onRemoveFromYourListPress] -->  ', error);
     });
   }

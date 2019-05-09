@@ -37,6 +37,28 @@ export default class PersonalChatScreen extends React.Component {
     this.setState({
       messages: [
         {
+          _id: 3,
+          text: "Yello",
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: this.state.user.name,
+            surname: this.state.user.surname,
+            avatar: this.state.user.image_minified
+          }
+        },
+        {
+          _id: 2,
+          text: "Hi",
+          createdAt: '2015-03-25T12:00:00Z',
+          user: {
+            _id: 2,
+            name: this.state.user.name,
+            surname: this.state.user.surname,
+            avatar: this.state.user.image_minified
+          }
+        },
+        {
           _id: 1,
           text: "Hello developer",
           createdAt: new Date(),
@@ -46,6 +68,13 @@ export default class PersonalChatScreen extends React.Component {
             surname: this.state.user.surname,
             avatar: this.state.user.image_minified
           }
+        },
+        {
+          _id: 4,
+          text: 'This is a system message',
+          createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+          system: true,
+          // Any additional custom parameters are passed through
         }
       ]
     });
