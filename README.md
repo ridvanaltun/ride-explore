@@ -2,7 +2,7 @@
 
 ## Known Issues
 
-React-native-tab-view kütüpnaesinde bir hata var, hatayı düzeltmek için `/node_modules/react-native-tab-view/src/PropTypes.js` dosyasıda bulunan `bounces: PropTypes.bool.isRequired` satırını `bounces: PropTypes.bool` şeklinde çevirmek gerekiyor.
+React-native-tab-view kütüphanesinde bir hata var, hatayı düzeltmek için `/node_modules/react-native-tab-view/src/PropTypes.js` dosyasında bulunan `bounces: PropTypes.bool.isRequired` satırını `bounces: PropTypes.bool` şeklinde çevirmek gerekiyor.
 
 ## Tech Stack
 
