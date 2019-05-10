@@ -13,10 +13,12 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.0.1",
     "expo": "32.0.0",
     "firebase": "^5.9.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "native-base": "^2.12.1",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-dialog-input": "^1.0.7",
@@ -26,7 +28,7 @@
     "react-native-modal": "^10.0.0",
     "react-native-modal-datetime-picker": "^7.4.0",
     "react-native-modal-selector": "^1.0.3",
-    "react-native-tab-view": "^2.2.0",
+    "react-native-tab-view": "1.4.0",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",

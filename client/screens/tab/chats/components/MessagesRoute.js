@@ -10,7 +10,8 @@ import { setMessages } from '../../../../redux/collection';
 const mapStateToProps = (state) => {
   return{
     personData: state.personData,
-    messages: state.messages
+    messages: state.messages,
+    isMessagesLoaded: state.isMessagesLoaded
   };
 }
 
@@ -24,6 +25,9 @@ class MessagesRoute extends React.Component{
 
   constructor(props){
     super(props);
+    this.state={
+      list: []
+    }
   }
 
   openPersonChat = (item) => {
@@ -35,44 +39,96 @@ class MessagesRoute extends React.Component{
     });
   }
 
-  render(){
+  createMessages = () => {
+    const users = this.props.messages;
+    let list = [];
+    let count = 0;
+
+    /*
+
+      Burada messages sayfasında render oluşturmak üzere bir obje listesi hazırlıyoruz.
+      uid, name, surname, image_minified ve last_message bilgisi barındıracak listedeki her obje
+
+    */
+
+    if(users.Bot !== null || users.Bot !== undefined){
+      // delete bot user
+      delete users.Bot;
+    }
+
+    const user_count = Object.keys(users).length;
+
+    for (let user in users) {
+
+      firebase.database().ref('/users/' + user).once('value').then((snapshot) => {
+
+        count++;
+
+        const message_count = users[user].length;
+        const last_message = users[user][message_count - 1].text;
+        const last_message_date = users[user][message_count - 1].date;
+
+        list.push({ 
+          uid: snapshot.val().uid,
+          name: snapshot.val().name,
+          surname: snapshot.val().surname,
+          image_minified: snapshot.val().image_minified,
+          last_message: last_message,
+          last_message_date: last_message_date
+        });
+
+        if(count === user_count){
+          this.setState({ list: list });
+        }
+
+      });    
+    }
+
+    return(null);
+  }
+
+  renderFlatList = () => {
     return(
-      <View style={{ flex: 1 }}>
-      {/*
-        <FlatList
-          data={this.props.followedUserList}
-          extraData={this.props.personData.follows}
-          keyExtractor={(item) => item.uid}
-          renderItem={ ({item, index}) => (
-            <ListItem
-              key={index}
-              leftAvatar={
-                <Avatar
-                  rounded
-                  source={{ uri: item.image_minified }}
-                  size='small'
-                  //title="CR"
-                  //icon={{name: 'user', type: 'font-awesome'}}
-                  //activeOpacity={0.7}
-                  //onPress={() => console.log(item.name)}
-                  //showEditButton={true}
-                />
-              }
-              title={item.name + ' ' + item.surname}
-              subtitle={item.about.length > 55 ? item.about.substring(0,54) + '...' : item.about}
-              chevron // sağ taraftaki ok işareti
-              onPress={()=> this.openPersonChat(item)}
-            />)
-          }
-          ListEmptyComponent={
-            <View>
-              <Text style={{ textAlign: 'center'}}>No data found.</Text>
-            </View>
-          }  
-        />
-      */}
-      </View>
+      <FlatList
+        data={this.state.list}
+        extraData={this.state}
+        keyExtractor={(item) => item.uid}
+        renderItem={ ({item, index}) => (
+          <ListItem
+            key={index}
+            leftAvatar={
+              <Avatar
+                rounded
+                source={{ uri: item.image_minified }}
+                size='small'
+              />
+            }
+            title={item.name + ' ' + item.surname}
+            subtitle={item.last_message.length > 55 ? item.last_message.substring(0,54) + '...' : item.last_message}
+            chevron // sağ taraftaki ok işareti
+            onPress={()=> this.openPersonChat(item)}
+          />)
+        }
+        ListEmptyComponent={
+          <View>
+            <Text style={{ textAlign: 'center'}}>No data found.</Text>
+          </View>
+        }  
+      />
     );
+  }
+
+  render(){
+      if(this.props.isMessagesLoaded === true){
+        return(
+          <View style={{ flex: 1 }}>
+            {this.createMessages()}
+            {this.renderFlatList()}
+          </View>
+        );
+      }else{
+        return(<View style={{ flex: 1 }}><Text>messages not loaded</Text></View>);
+      }
   }
 }
 

@@ -47,7 +47,7 @@ export default class App extends React.Component {
   }
 
   renderPersistLoading = () => (
-    <View style={styles.container}>
+    <View style={styles.persistLoading}>
       <Text>Persist Loading..</Text>
       <ActivityIndicator size="large" />
     </View>
@@ -111,4 +111,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  persistLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });

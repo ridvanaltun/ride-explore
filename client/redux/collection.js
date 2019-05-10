@@ -50,6 +50,9 @@ export default reducer = (state = initialState, action) => {
         case "setMessages":
             return { ...state, messages: action.value };
 
+        case "setIsMessagesLoaded":
+            return { ...state, isMessagesLoaded: action.value };
+
         default:
             return state;
     }
@@ -164,6 +167,13 @@ const setMessages = (messages) => {
     };
 }
 
+const setIsMessagesLoaded = (isMessagesLoaded) => {
+    return {
+        type: "setIsMessagesLoaded",
+        value: isMessagesLoaded
+    };
+}
+
 export {
     setSocketID,
     setIsAppOnForeground,
@@ -179,5 +189,6 @@ export {
     setBlockedUserList,
     setApplyMapRegion,
     setIsLoading,
-    setMessages
+    setMessages,
+    setIsMessagesLoaded
 };

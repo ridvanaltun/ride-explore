@@ -44,13 +44,14 @@ const initialState = {
     blockedUserList: [ ],
     applyMapRegion: false,
     isLoading: false,
-    messages: { }
+    messages: { },
+    isMessagesLoaded: false
 };
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['personData', 'messages']
+    whitelist: ['personData']
 }
 
 const enhancers = [];

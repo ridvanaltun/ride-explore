@@ -19,6 +19,7 @@ import {
   setPermissionStatus,
   setServiceStatus,
   setMessages,
+  setIsMessagesLoaded,
   appendItemFollowedUserList,
   setFollowedUserList
 } from '../redux/collection';
@@ -49,6 +50,7 @@ const mapDispatchToProps = (dispatch) => {
     setServiceStatus: (status) => { dispatch(setServiceStatus(status)) },
     setPermissionStatus: (status) => { dispatch(setPermissionStatus(status)) },
     setMessages: (object) => { dispatch(setMessages(object)) },
+    setIsMessagesLoaded: (boolean) => { dispatch(setIsMessagesLoaded(boolean)) },
     appendItemFollowedUserList: (list) => {dispatch(appendItemFollowedUserList(list))},
     setFollowedUserList: (list) => {dispatch(setFollowedUserList(list))}
   };
@@ -111,6 +113,7 @@ class LoadingScreen extends React.Component {
     // delivered kanalındaki tüm mesajları messages nesnesinde topluyoruz
     // Redux-persist üstünde aynı veri olduğunda indirme işlemini atlayacak bir yapıya ihtiyaç var.
     await firebase.database().ref('/users/' + uid + '/messages/delivered/').once('value').then((snapshot) => {
+      this.props.setIsMessagesLoaded(false);
       if(snapshot.val() !== null){ messages = snapshot.val(); }
     });
 
@@ -128,12 +131,14 @@ class LoadingScreen extends React.Component {
     // delivered kanalını doldurup undelivered kanalını boşaltıyoruz
     await firebase.database().ref('/users/' + uid + '/messages/delivered/').update(messages).then(() => {
       this.props.setMessages(messages);
+      this.props.setIsMessagesLoaded(true);
       firebase.database().ref('/users/' + uid + '/messages/undelivered/').set([]);
     });
 
     // undelivered kanalı üstündeki değişiklikleri listener ile takip ediyoruz 
     firebase.database().ref('/users/' + uid + '/messages/undelivered/').on('value', (snapshot)=> {
       if(snapshot.val() !== null){
+        this.props.setIsMessagesLoaded(false);
         const undelivered = snapshot.val();
         undelivered.forEach((message)=> {
           if(messages[message.uid] === undefined){ messages[message.uid]=[]; }
@@ -142,6 +147,7 @@ class LoadingScreen extends React.Component {
         // değişiklikleri uyguluyoruz
         firebase.database().ref('/users/' + uid + '/messages/delivered/').update(messages).then(() => {
           this.props.setMessages(messages);
+          this.props.setIsMessagesLoaded(true);
           firebase.database().ref('/users/' + uid + '/messages/undelivered/').set([]);
         });
       }

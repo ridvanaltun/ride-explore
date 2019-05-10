@@ -43,6 +43,8 @@ Version 1:
   ☐ Explore sayfasındaki modalı component haline getir. @low
   ☐ Loading ekranında hangi işlemin yapıldığı gösterilmeli. @low
   ☐ Socket ile client arasında nadir oluşan bir hata var, bu hatayı çöz. @low
+  ☐ Native-base kütüphanesini implement et, chat ekranındaki navigator header yerine bunun header elementini kullan. @low
+  ✔ React-native-tab-view komponentinin çıkardığı hatayı gider. @high @done (19-05-10 20:53)
 
 Version 2:
   ☐ ExpoKit'e geçilmeli. @high @high
@@ -79,3 +81,4 @@ Extra:
 
   ☐ Sadece bulunduğumuz bölgedeki kullanıcılar gözüksün haritada, haritaya bulunduğumuz bölgeye göre polygon çizdirmemiz ve ona göre sunucudan data talep etmeli ve almalıyız.
   ☐ Kullanıcı harita üstünde bir nokta seçip buluşma noktası olarak ayarlayabilmeli.
+  ☐ Hide Me özelliği kullanılınca navigation header'lar tasarımı değişmeli.

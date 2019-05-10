@@ -47,7 +47,7 @@ class ChatsScreen extends React.Component {
       <TabView
         lazy
         navigationState={this.state}
-        renderScene={({ route }) => {
+        renderScene= {({ route }) => {
           switch (route.key) {
             case 'chats':
                return <MessagesRoute {...this.props} />;
@@ -55,11 +55,11 @@ class ChatsScreen extends React.Component {
               return <FollowsRoute {...this.props} />;
             default:
               return null;
+            }
           }
         }
-      }
         onIndexChange={index => this.setState({ index })}
-        initialLayout={{ width: Dimensions.get('window').width }}
+        initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
         renderTabBar={this._renderTabBar}
         renderLazyPlaceholder={this._renderLazyPlaceholder}
         style={styles.container}
