@@ -43,8 +43,15 @@ Version 1:
   ☐ Explore sayfasındaki modalı component haline getir. @low
   ☐ Loading ekranında hangi işlemin yapıldığı gösterilmeli. @low
   ☐ Socket ile client arasında nadir oluşan bir hata var, bu hatayı çöz. @low
-  ☐ Native-base kütüphanesini implement et, chat ekranındaki navigator header yerine bunun header elementini kullan. @low
+  ✔ Native-base kütüphanesini implement et, chat ekranındaki navigator header yerine bunun header elementini kullan. @low @done (19-05-11 04:30)
   ✔ React-native-tab-view komponentinin çıkardığı hatayı gider. @high @done (19-05-10 20:53)
+  ☐ Chat kısmında kendi mesajmımızı sunucudan çekmek yerine localden yazdır sadece. @high
+  ☐ MessagesRoute üstünde yeni mesaj attığımızda yada geldiğinde sonsuz döngü oluşuyor, mantık yapısını düzelt. @high
+  ☐ Native base ile person, profile register sayfası tasarımı güncellenmeli. @high
+  ☐ Map üstünde balon tıklayınca her zaman kaybolmuyor, mantık hatasının düzeltilmesi lazım. @low
+  ☐ Map, sayfaya yüklenmeden önce initial state değeri geçerli lokasyonumuz oalrak alınmalı, sonrasında açılmalı. @low
+  ☐ Kullanıcının online durumu chat sayfasında gösterilmeli. @high
+  ☐ PersonChatScreen her kullanıcı için ayrı ayrı cachlenmeli, kullanıcı her seferinde sunucudan bilgi çekip render işlemi yapıyor çünkü. @high
 
 Version 2:
   ☐ ExpoKit'e geçilmeli. @high @high

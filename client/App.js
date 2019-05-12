@@ -89,6 +89,8 @@ export default class App extends React.Component {
       ]),
       Font.loadAsync({
         ...Icon.Ionicons.font,
+        'Roboto': require('./node_modules/native-base/Fonts/Roboto.ttf'),
+        'Roboto_medium': require('./node_modules/native-base/Fonts/Roboto_medium.ttf'),
         'Lato-Hairline': require('./assets/fonts/Lato-Hairline.ttf'),
         'Lato-Light': require('./assets/fonts/Lato-Light.ttf'),
         'Lato-Regular': require('./assets/fonts/Lato-Regular.ttf'),

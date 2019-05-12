@@ -18,8 +18,6 @@ import {
   setLocation,
   setPermissionStatus,
   setServiceStatus,
-  setMessages,
-  setIsMessagesLoaded,
   appendItemFollowedUserList,
   setFollowedUserList
 } from '../redux/collection';
@@ -34,7 +32,6 @@ const mapStateToProps = (state) => {
     location: state.location,
     serviceStatus: state.serviceStatus,
     permissionStatus: state.permissionStatus,
-    messages: state.messages,
     followedUserList: state.followedUserList
   };
 }
@@ -49,8 +46,6 @@ const mapDispatchToProps = (dispatch) => {
     setLocation: (coords) => { dispatch(setLocation(coords)) },
     setServiceStatus: (status) => { dispatch(setServiceStatus(status)) },
     setPermissionStatus: (status) => { dispatch(setPermissionStatus(status)) },
-    setMessages: (object) => { dispatch(setMessages(object)) },
-    setIsMessagesLoaded: (boolean) => { dispatch(setIsMessagesLoaded(boolean)) },
     appendItemFollowedUserList: (list) => {dispatch(appendItemFollowedUserList(list))},
     setFollowedUserList: (list) => {dispatch(setFollowedUserList(list))}
   };
@@ -103,54 +98,6 @@ class LoadingScreen extends React.Component {
 
       });
 
-    });
-  }
-
-  listenerMessages = async (uid) => {
-
-    let messages = {};
-
-    // delivered kanalındaki tüm mesajları messages nesnesinde topluyoruz
-    // Redux-persist üstünde aynı veri olduğunda indirme işlemini atlayacak bir yapıya ihtiyaç var.
-    await firebase.database().ref('/users/' + uid + '/messages/delivered/').once('value').then((snapshot) => {
-      this.props.setIsMessagesLoaded(false);
-      if(snapshot.val() !== null){ messages = snapshot.val(); }
-    });
-
-    // undelivered kanalındaki tüm mesajları messages nesnesine topluyoruz
-    await firebase.database().ref('/users/' + uid + '/messages/undelivered/').once('value').then((snapshot) => {
-      if(snapshot.val() !== null){
-        const undelivered = snapshot.val();
-        undelivered.forEach((message)=> {
-          if(messages[message.uid] === undefined){ messages[message.uid]=[]; }
-          messages[message.uid].push({ text: message.text, date: message.date });
-        });
-      }
-    });
-
-    // delivered kanalını doldurup undelivered kanalını boşaltıyoruz
-    await firebase.database().ref('/users/' + uid + '/messages/delivered/').update(messages).then(() => {
-      this.props.setMessages(messages);
-      this.props.setIsMessagesLoaded(true);
-      firebase.database().ref('/users/' + uid + '/messages/undelivered/').set([]);
-    });
-
-    // undelivered kanalı üstündeki değişiklikleri listener ile takip ediyoruz 
-    firebase.database().ref('/users/' + uid + '/messages/undelivered/').on('value', (snapshot)=> {
-      if(snapshot.val() !== null){
-        this.props.setIsMessagesLoaded(false);
-        const undelivered = snapshot.val();
-        undelivered.forEach((message)=> {
-          if(messages[message.uid] === undefined){ messages[message.uid]=[]; }
-          messages[message.uid].push({ text: message.text, date: message.date });
-        });
-        // değişiklikleri uyguluyoruz
-        firebase.database().ref('/users/' + uid + '/messages/delivered/').update(messages).then(() => {
-          this.props.setMessages(messages);
-          this.props.setIsMessagesLoaded(true);
-          firebase.database().ref('/users/' + uid + '/messages/undelivered/').set([]);
-        });
-      }
     });
   }
 
@@ -320,7 +267,6 @@ class LoadingScreen extends React.Component {
                 .then( () => {
                   this.props.setPersonData(snapshot.val());
                   this.listenerPersonData(user.uid);
-                  this.listenerMessages(user.uid);
                   this.listenerFollows(user.uid);
                 })
                 .catch((error) => { console.log('ERROR -> [FIREBASE] --> [last_logged_in] --->  ', error);

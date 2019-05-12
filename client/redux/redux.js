@@ -43,9 +43,7 @@ const initialState = {
     followedUserList: [ ],
     blockedUserList: [ ],
     applyMapRegion: false,
-    isLoading: false,
-    messages: { },
-    isMessagesLoaded: false
+    isLoading: false
 };
 
 const persistConfig = {

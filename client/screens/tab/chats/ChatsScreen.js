@@ -1,8 +1,7 @@
-// Elements
 import React from 'react';
 import { Dimensions, StyleSheet, StatusBar } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements';
 
 // Constants
 import Colors from '../../../constants/Colors';
@@ -21,18 +20,17 @@ class ChatsScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      isFetching: false,
       index: 0,
       routes: [
-        { key: 'chats', icon: 'md-chatbubbles' /*title: 'Messages'*/ },
-        { key: 'follows', icon: 'md-contact' /* title: 'Follows' */ }
+        { key: 'chats', type: 'ionicon', icon: 'md-chatbubbles' /*title: 'Messages'*/ },
+        { key: 'follows', type: 'ionicon', icon: 'md-contact' /* title: 'Follows' */ }
       ]
-    };
+    }
   }
 
   _renderLazyPlaceholder = ({ route }) => <LazyPlaceholder route={route} />;
 
-  _renderIcon = ({ route, color }) => <Ionicons name={route.icon} size={24} color={color} />;
+  _renderIcon = ({ route, color }) => <Icon type={route.type} name={route.icon} size={24} color={color} />;
 
   _renderTabBar = props => 
     <TabBar
@@ -72,12 +70,12 @@ export default ChatsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: StatusBar.currentHeight,
+    marginTop: StatusBar.currentHeight
   },
   tabbar: {
     backgroundColor: Colors.whatsApp.green
   },
   indicator: {
-    backgroundColor: '#ffeb3b',
+    backgroundColor: "#ffeb3b"
   }
 });
