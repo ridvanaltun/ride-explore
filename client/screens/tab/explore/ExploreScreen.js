@@ -226,17 +226,30 @@ class  ExploreScreen extends React.Component {
       let users = this.props.onlineUserList;
       delete users[this.props.socketID];
 
-      const followList = this.props.personData.follows;
-      
-      const usersWithLocation = _.filter(this.props.onlineUserList, (user) => {
-        // if users no location data or uid we not use them
-        if(!!user.uid && (!!user.latitude || !!user.longitude)){
-          // is user in our follow list?
-          const isFollowed = followList.some(followed => followed == user.uid);
-          user.isFollowed = isFollowed;
-          return user;
-        }
-      });
+      let usersWithLocation = {};
+
+      if(this.props.personData.follows !== undefined){
+        const followList = this.props.personData.follows;
+        
+        usersWithLocation = _.filter(this.props.onlineUserList, (user) => {
+          // if users no location data or uid we not use them
+          if(!!user.uid && (!!user.latitude || !!user.longitude)){
+            // is user in our follow list?
+            const isFollowed = followList.some(followed => followed == user.uid);
+            user.isFollowed = isFollowed;
+            return user;
+          }
+        });
+      }else{
+        usersWithLocation = _.filter(this.props.onlineUserList, (user) => {
+          // if users no location data or uid we not use them
+          if(!!user.uid && (!!user.latitude || !!user.longitude)){
+            // is user in our follow list?
+            user.isFollowed = false;
+            return user;
+          }
+        });
+      }
 
       return usersWithLocation.map( (user, index) => {
         return (

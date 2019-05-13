@@ -39,7 +39,6 @@ class MessagesRoute extends React.Component{
   setChangeListener = () => {
 
     changeListener = firebase.database().ref('/users/').child(this.props.personData.uid).child('messages');
-
     // Tüm konuşma id'leri burada akıyor
     changeListener.child('id').on('child_added', snapshot => {
 
@@ -87,6 +86,7 @@ class MessagesRoute extends React.Component{
     changeListener.child('last_messages').limitToLast(1).on('child_added', snapshot => {
 
       if(isFirstValuePassed === true){
+
         const user = {
           last_message: snapshot.val().text,
           last_message_date: snapshot.val().date,
@@ -116,11 +116,20 @@ class MessagesRoute extends React.Component{
     changeListener.child('last_messages').on('child_changed', snapshot => {
 
       let usersRef = this.state.usersRef;
-      usersRef[snapshot.key].last_message = snapshot.val().text;
-      usersRef[snapshot.key].last_message_date = snapshot.val().date;
-      usersRef[snapshot.key].last_message_owner = snapshot.val().uid;
-      this.setState({ usersRef });   
-      
+
+      if(usersRef[snapshot.key] === undefined){
+        usersRef[snapshot.key] = {};
+        usersRef[snapshot.key].last_message = snapshot.val().text;
+        usersRef[snapshot.key].last_message_date = snapshot.val().date;
+        usersRef[snapshot.key].last_message_owner = snapshot.val().uid;
+        this.setState({ usersRef });   
+      }else{ 
+        usersRef[snapshot.key].last_message = snapshot.val().text;
+        usersRef[snapshot.key].last_message_date = snapshot.val().date;
+        usersRef[snapshot.key].last_message_owner = snapshot.val().uid;
+        this.setState({ usersRef }); 
+      }
+   
     });
   }
 

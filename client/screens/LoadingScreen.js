@@ -80,24 +80,23 @@ class LoadingScreen extends React.Component {
 
     firebase.database().ref('/users/' + uid + '/follows/').on('value', (snapshot) => { 
 
-      this.props.setFollowedUserList([]);
-      const followed_uid_list = snapshot.val();
+      if(snapshot.val() !== null){
+        this.props.setFollowedUserList([]);
+        const followed_uid_list = snapshot.val();
 
-      followed_uid_list.forEach(uid => {
-        firebase.database().ref('/users/' + uid).once('value').then(snapshot => {
-          const user = {
-            uid: snapshot.val().uid,
-            name: snapshot.val().name,
-            surname: snapshot.val().surname,
-            image_minified: snapshot.val().image_minified,
-            about: snapshot.val().about
-          }
-          this.props.appendItemFollowedUserList(user);
-        });
-
-
-      });
-
+        followed_uid_list.forEach(uid => {
+          firebase.database().ref('/users/' + uid).once('value').then(snapshot => {
+            const user = {
+              uid: snapshot.val().uid,
+              name: snapshot.val().name,
+              surname: snapshot.val().surname,
+              image_minified: snapshot.val().image_minified,
+              about: snapshot.val().about
+            }
+            this.props.appendItemFollowedUserList(user);
+          });
+        });  
+      }
     });
   }
 

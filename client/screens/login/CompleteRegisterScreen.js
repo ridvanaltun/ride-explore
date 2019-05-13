@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, TextInput, Switch } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, TextInput, Switch, Alert } from 'react-native';
 import { Button, Icon, ListItem, Card } from 'react-native-elements';
+import { Location } from 'expo';
 import firebase from 'firebase';
 import Moment from 'moment';
 
@@ -15,17 +16,22 @@ import Fonts from '../../constants/Fonts';
 
 // Redux
 import { connect } from 'react-redux';
-import { setPersonData } from '../../redux/collection';
+import { setPersonData, setServiceStatus, setPermissionStatus, setLocation } from '../../redux/collection';
 
 const mapStateToProps = (state) => {
   return{
-    personData: state.personData
+    personData: state.personData,
+    permissionStatus: state.permissionStatus,
+    serviceStatus: state.serviceStatus
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return{
-    setPersonData: (text) => { dispatch(setPersonData(text)) }
+    setPersonData: (text) => { dispatch(setPersonData(text)) },
+    setServiceStatus: (object) => { dispatch(setServiceStatus(object)) },
+    setLocation: (object) => { dispatch(setLocation(object)) },
+    setPermissionStatus: (object) => { dispatch(setPermissionStatus(object)) }
   };
 }
 
@@ -43,6 +49,7 @@ class CompleteRegisterScreen extends React.Component {
       isDateTimePickerVisible: false,
       isAboutModalVisible: false,
       about: '',
+      birthdate: '',
       terms: true,
       notification: true
     }
@@ -50,41 +57,113 @@ class CompleteRegisterScreen extends React.Component {
 
   onRegisterPress = () => {
 
-    firebase.database().ref('/users/' + this.state.uid)
-      .update({
-        verified: true
-      })
-      .then(() => this.props.navigation.navigate('Main'))
-      .catch((error) => console.log('ERROR -> [FIREBASE] --> [onRegisterPress] ---> ', error));
+    if(this.state.about !== '' && this.state.birthdate !== '' && this.state.terms === true){
+      firebase.database().ref('/users/' + this.state.uid)
+        .update({
+          verified: true,
+          birthdate: this.state.birthdate,
+          about: this.state.about,
+          online: true,
+          place: 'Izmir, Turkey',
+          settings: {
+            color: {
+              followsPin: 'red',
+              myPin: 'green',
+              othersPin: 'gold'
+            },
+            connect: {
+              facebook: {
+                verified: false
+              },
+              instagram: {
+                verified: false
+              },
+              spotify: {
+                verified: false
+              }
+            },
+            hide: false,
+            language: 'Turkish',
+            theme: 'normal',
+            privacy: {
+              birthdate: 'Everyone',
+              onlineStatus: 'Everyone',
+              profilePicture: 'Everyone'
+            }
+          }
+
+        })
+        .then(() => {
+          this.listenerPersonData();
+          this.listenerLocation();
+          this.props.navigation.navigate('Main');
+        })
+        .catch((error) => console.log('ERROR -> [FIREBASE] --> [onRegisterPress] ---> ', error));
+
+      }else if(this.state.terms === false){
+        Alert.alert('Terms is not selected!', 'You need to accept our terms.');
+      }else if(this.state.birthdate === ''){
+        Alert.alert('Birthdate is not selected!', 'You need to select your birthdate.');
+      }else if(this.state.about === ''){
+        Alert.alert('About is null', 'You need to write an about text.');
+      }
+
   }
 
-  handleDatePicked = date => {
-    
-    firebase.database().ref('/users/' + this.props.personData.uid)
-      .update({ birthdate: Moment(date).format('D MMM YY') })
-      .then(() => this.setState({ isDateTimePickerVisible: false }))
-      .catch(err => console.log('[ERROR] -> [FIRBASE] --> [handleDatePicked] ---> ', err));
+  listenerLocation = () => {
+    Location.watchPositionAsync({
+      enableHighAccuracy: true,
+      distanceInterval: 10, // sadece 10 metre üzeri lokasyon değişince lokasyonu güncelle
+    }, (newLocation) => {
+
+      this.props.setLocation({
+        latitude: newLocation.coords.latitude, 
+        longitude: newLocation.coords.longitude
+      });
+
+      console.log('SOCKET: OUR LOCATION SENDED!');
+
+      socket.emit('update-location', { 
+        latitude: newLocation.coords.latitude,
+        longitude: newLocation.coords.longitude
+      });
+
+    }).catch((err)=> { 
+      if(String(err).includes('Location services are disabled')){
+        this.props.setServiceStatus({ ...this.props.serviceStatus, location: false });
+        console.log('SERVICE STATUS: ', 'LOCATION => FALSE');
+      }else if(String(err).includes('Not authorized to use location services')){
+        this.props.setPermissionStatus({ ...this.props.permissionStatus, location: false });
+        console.log('PERMISSON STATUS: ', 'LOCATION => FALSE');
+      }else{
+        console.log(err);
+      }
+    });
   }
 
-  onChangeAboutPress = () => {
-    if(this.state.about != ''){
+  listenerPersonData = () => {
 
-      firebase.database().ref('/users/' + this.props.personData.uid)
-        .update({ about: this.state.about })
-        .catch(err => console.log('ERROR -> [FIREBASE] -> [onChangeAboutPress] ---> ', err));
+    firebase.database().ref('/users/').child(this.state.uid).on('value', snapshot => {
 
-      this.setState({ isAboutModalVisible: false });
+        this.props.setPersonData(snapshot.val());
 
-    }else{
-      Alert.alert('About Text', 'About text can not be empty.');
-    }
+        socket.emit('update-person-data', { 
+          name: snapshot.val().name,
+          surname: snapshot.val().surname,
+          about: snapshot.val().about || 'Undefiend',
+          image_original: snapshot.val().image_original,
+          image_minified: snapshot.val().image_minified
+        });
+
+        console.log('SOCKET: OUR PERSONAL DATA SENDED!');
+      });
   }
 
   renderDataTimePicker = () => {
     return(
       <DateTimePicker
         isVisible={this.state.isDateTimePickerVisible}
-        onConfirm={(date) => this.handleDatePicked(date)}
+        onConfirm={(date) => this.setState({ birthdate: Moment(date).format('D MMM YY'), isDateTimePickerVisible: false })}
         onCancel={() => this.setState({ isDateTimePickerVisible: false })}
       />
     );
@@ -97,7 +176,7 @@ class CompleteRegisterScreen extends React.Component {
         onBackButtonPress={() => this.setState({ isAboutModalVisible: false })}
         onBackdropPress={() => this.setState({ isAboutModalVisible: false })}
       >
-        <View style={{ backgroundColor: "white", padding: 22, borderRadius: 4, borderColor: "rgba(0, 0, 0, 0.1)", }}>
+        <View style={{ backgroundColor: "white", padding: 22, borderRadius: 4, borderColor: "rgba(0, 0, 0, 0.1)" }}>
           <Text style={{ fontSize: 20, marginBottom: 12 }}>Change Your About</Text>
           <View style={{ fontSize: 15, padding: 15 }}>
             <Text style={{ fontSize: 15, fontWeight: 'bold' }}>About</Text>
@@ -114,7 +193,7 @@ class CompleteRegisterScreen extends React.Component {
           </View>
           <View style={{ flexDirection: 'row', margin: 12 }}>
             <Button
-              onPress={() => this.onChangeAboutPress()}
+              onPress={() => this.setState({ isAboutModalVisible: false})}
               type='clear'
               title="Apply"
             />
@@ -150,9 +229,9 @@ class CompleteRegisterScreen extends React.Component {
             rightElement={
               <Icon
                 type='antdesign'
-                name={this.props.personData.birthdate === undefined ? 'checkcircleo' : 'checkcircle'}
+                name={this.state.birthdate === '' ? 'checkcircleo' : 'checkcircle'}
                 size={25}
-                color={this.props.personData.birthdate === undefined ? "#B2DFD8" : "#41AD49"}
+                color={this.state.birthdate === '' ? "#B2DFD8" : "#41AD49"}
                 iconStyle={{ paddingRight: 10 }} 
               />
             }
@@ -165,9 +244,9 @@ class CompleteRegisterScreen extends React.Component {
             rightElement={
               <Icon
                 type='antdesign'
-                name={this.props.personData.about === undefined ? 'checkcircleo' : 'checkcircle'}
+                name={this.state.about === '' ? 'checkcircleo' : 'checkcircle'}
                 size={25}
-                color={this.props.personData.about === undefined ? "#B2DFD8" : "#41AD49"}
+                color={this.state.about === '' ? "#B2DFD8" : "#41AD49"}
                 iconStyle={{ paddingRight: 10 }} 
               />
             }

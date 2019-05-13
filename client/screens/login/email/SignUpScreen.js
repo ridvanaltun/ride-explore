@@ -52,7 +52,9 @@ class SignUpScreen extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
 
             Alert.alert("Account created.");
-            NavigationService.navigate('Main');
+
+            // burada uid bilgisini göndermemiz gerekiyor.
+            this.props.navigation.navigate('CompleteRegister');
 
           })
           .catch((error) => {
