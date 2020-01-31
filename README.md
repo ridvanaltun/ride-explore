@@ -23,6 +23,6 @@ React-native-tab-view kütüphanesinde bir hata var, hatayı düzeltmek için `/
 |---	|---	|---	|---	|
 |  ![explore](/images/map.png "Explore") 	|  ![rider-card](/images/map_card.png "Rider Card") 	|  ![rider-profile](/images/user_profile.png "Rider Profile") 	|  ![user-profile](/images/profile.png "User Profile") 	|
 
-|  Chat  	|  Message List  | Follow List	|  Settings  	|
+|  Chat  	|  Messages  | Follows	|  Settings  	|
 |---	|---	|---	|---	|
 |  ![chat](/images/chat.png "Chat") 	|  ![message-list](/images/chat_list.png "Message List") 	|  ![follow-list](/images/follows_list.png "Follow List") 	|  ![settings](/images/settings.png "Settings") 	|
