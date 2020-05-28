@@ -26,3 +26,8 @@ React-native-tab-view kütüphanesinde bir hata var, hatayı düzeltmek için `/
 |  Chat  	|  Messages  | Follows	|  Settings  	|
 |---	|---	|---	|---	|
 |  ![chat](/images/chat.png "Chat") 	|  ![message-list](/images/chat_list.png "Message List") 	|  ![follow-list](/images/follows_list.png "Follow List") 	|  ![settings](/images/settings.png "Settings") 	|
+
+|  Test Panel  	|
+|---	|
+|  ![panel](/images/panel.png "Panel") 	|
+
