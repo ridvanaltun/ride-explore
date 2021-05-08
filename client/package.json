@@ -16,7 +16,7 @@
     "@expo/vector-icons": "^10.0.1",
     "expo": "32.0.0",
     "firebase": "^5.9.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "native-base": "^2.12.1",
     "react": "16.5.0",
