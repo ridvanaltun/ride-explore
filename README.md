@@ -1,10 +1,8 @@
 # Ride Explore
 
-## Known Issues
+![preview](/images/preview.png "Preview")
 
-React-native-tab-view kütüphanesinde bir hata var, hatayı düzeltmek için `/node_modules/react-native-tab-view/src/PropTypes.js` dosyasında bulunan `bounces: PropTypes.bool.isRequired` satırını `bounces: PropTypes.bool` şeklinde çevirmek gerekiyor.
-
-## Tech Stack
+# Tech Stack
 
 - React-Native
 - Redux
@@ -13,7 +11,7 @@ React-native-tab-view kütüphanesinde bir hata var, hatayı düzeltmek için `/
 - Node.js
 - Firebase
 
-## Showcase
+# Showcase
 
 |  Auth  	|  Email Registration	|  Login with Email 	|   Reset Password	| 
 |---	|---	|---	|---	|
@@ -30,4 +28,3 @@ React-native-tab-view kütüphanesinde bir hata var, hatayı düzeltmek için `/
 |  Test Panel  	|
 |---	|
 |  ![panel](/images/panel.png "Panel") 	|
-
